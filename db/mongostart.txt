@@ -1,0 +1,8 @@
+mongo 							--init
+db.dropDatabase()				--if clean db
+use mydb						--get or create db
+db.createCollection(user)		--create table
+db.createCollection(message)	--create table
+db.createCollection(userroom)	--create table
+
+db.user.drop()					--example for dropping table with name user	

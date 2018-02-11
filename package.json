@@ -1,0 +1,17 @@
+{
+  "name": "QUICK",
+  "version": "1.0.0",
+  "description": "Chat Application",
+  "private": true,
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "express": "*",
+    "jade": "*",
+    "mongodb": "^3.0.0-rc0",
+    "mongoose": "^4.13.7",
+    "socket.io": "*"
+  }
+}
