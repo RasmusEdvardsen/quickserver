@@ -20,16 +20,16 @@ io.engine.generateId = (req) => {
 }
 
 io.on('connection', function(socket){
-  socket.on('newmessage', function(msg){
-    console.log(msg) //TODO: remove
-    io.emit('newmessage', msg)
+  socket.on('newmessage', function(username, msg){
+    console.log("test")
+    io.emit('newmessage', username + ": " + msg)
     db.save(new mongoosemodels.Message({
       date: new Date(), //TODO: LOCAL DATETIME
       userid: 'dummy', //TODO: change when implemented.
       message: msg //TODO:: remember when testing only server
-    })) //TODO: Expand with userid and datecreated.
+    }), function(doc){/*TODO: DUMB*/}) //TODO: Expand with userid and datecreated.
   })
-  socket.on('privatejoin', function(name, email){
+  socket.on('privatecreate', function(name, email){
     mongoosemodels.User.find({ email: email }, function(err, user){
       if(err){
         //TODO: Figure out what to do here
@@ -45,6 +45,7 @@ io.on('connection', function(socket){
         console.log(doc)
         db.push([socket.id, user[0]._id], doc)
       })
+      //TODO: NEEDS TO ACTUALLY JOIN THE ROOM!
       //TODO: NOTIFICATION ABOUT INVITE TO ROOM!
     })
   })
