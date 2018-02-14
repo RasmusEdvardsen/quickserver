@@ -20,9 +20,9 @@ io.engine.generateId = (req) => {
 }
 
 io.on('connection', function(socket){
-  socket.on('newmessage', function(username, msg){
-    console.log("test")
-    io.emit('newmessage', username + ": " + msg)
+  socket.on('privatemessage', function(room, username, msg){
+    console.log(io.sockets.adapter.rooms)
+    io.to(room).emit('newmessage', username + ": " + msg)
     db.save(new mongoosemodels.Message({
       date: new Date(), //TODO: LOCAL DATETIME
       userid: 'dummy', //TODO: change when implemented.
@@ -35,16 +35,22 @@ io.on('connection', function(socket){
         //TODO: Figure out what to do here
         console.log(err)
       }
-      console.log
       db.save(new mongoosemodels.Room({
         date: new Date(),
-        String,
         name: name,
         listUsers: [ socket.id, user[0]._id ]
       }), function(doc){
-        console.log(doc)
         db.push([socket.id, user[0]._id], doc)
+        socket.join(doc._id)
+        //If undefined, means user isn't connected.
+        if(io.sockets.connected[user[0]._id])
+          io.sockets.connected[user[0]._id].join(doc._id)
+        console.log(io.sockets.adapter.rooms)
+
+        //TODO: make this
+        io.to(socket.id).emit("newroom", doc._id.toString())
       })
+
       //TODO: NEEDS TO ACTUALLY JOIN THE ROOM!
       //TODO: NOTIFICATION ABOUT INVITE TO ROOM!
     })
