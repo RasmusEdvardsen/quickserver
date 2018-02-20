@@ -27,6 +27,13 @@ module.exports = {
     callback(doc)
   },
 
+  findRooms: function(uid, callback){
+    mongoosemodels.Room.find({ listUsers:uid }, function(err, records){
+      if(err) throw err
+      callback(records)
+    })
+  },
+
   push: function(arrUser, doc){
     mongoosemodels.User.updateMany(
       {_id:
