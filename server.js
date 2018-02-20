@@ -3,7 +3,6 @@ var http = require('http').Server(app)
 var io = require('socket.io')(http)
 var db = require('./db/mongo.js')
 var routes = require('./api/routes/routebehavior.js') //importing route
-var mongoosemodels = require('./db/mongoosemodels.js')
 var bodyParser = require('body-parser')
 
 app.use(bodyParser.json()) // support json encoded bodies
@@ -36,9 +35,8 @@ io.on('connection', function(socket){
   socket.on('privatecreate', function(name, email){
     privatecreate(socket, name, email)
   })
-  /*socket.on('privateadd', function(uid, rid){
-    //TODO: WAAAY LATER
-  })*/
+  //socket.on('privateadd', function(uid, rid){})
+  //socket.on('privateoldmsgs', function(room, earliestfetchedmsg){})
 })
 
 // Meta Events
@@ -51,13 +49,12 @@ function getuserrooms(socket, uid){
     io.to(socket.id).emit('userrooms', roomIDs)
   })
 }
-
 //private events
 function privatecreate(socket, name, email){
   //TODO: IF THEY ALREADY HAVE A ROOM, THEN GO TO SAME
-  mongoosemodels.User.find({ email: email }, function(err, user){
+  db.User.find({ email: email }, function(err, user){
     if(err) throw err //TODO: Figure out what to do here
-    db.save(new mongoosemodels.Room({
+    db.save(new db.Room({
       date: new Date(),
       name: name,
       listUsers: [ socket.id, user[0]._id ]
@@ -76,9 +73,10 @@ function privatecreate(socket, name, email){
   })
 }
 function privatemessage(socket, room, username, msg){
+  console.log("asdasdqwe")
   console.log(io.sockets.adapter.rooms)
   io.to(room).emit('newmessage', username + ": " + msg)
-  db.save(new mongoosemodels.Message({
+  db.save(new db.Message({
     date: new Date(), //TODO: LOCAL DATETIME
     userid: 'dummy', //TODO: change when implemented.
     message: msg //TODO:: remember when testing only server

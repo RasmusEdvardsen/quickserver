@@ -1,5 +1,5 @@
 var mongoose = require('mongoose')
-var mongoosemodels = require('./../../db/mongoosemodels.js')
+var db = require('./../../db/mongo.js')
 
 module.exports = {
   create_user: function(req, res){
@@ -27,13 +27,13 @@ module.exports = {
       + e)
       return
     }
-    mongoosemodels.User.find({ email: req.body.email }, function(err, user){
+    db.User.find({ email: req.body.email }, function(err, user){
       if (err) {
         res.status(500)
         res.send(err)
         return
       } else if (user.length == 0) {
-        var user = new mongoosemodels.User({
+        var user = new db.User({
           date: new Date(),
           username: req.body.username,
           email: req.body.email,
@@ -82,7 +82,7 @@ module.exports = {
       + e)
       return
     }
-    mongoosemodels.User.find({ email: req.query.email, password: req.query.password }, function(err, user){
+    db.User.find({ email: req.query.email, password: req.query.password }, function(err, user){
       if (err) {
         res.send(err)
         return
