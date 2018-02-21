@@ -73,9 +73,8 @@ function privatecreate(socket, name, email){
   })
 }
 function privatemessage(socket, room, username, msg){
-  console.log("asdasdqwe")
   console.log(io.sockets.adapter.rooms)
-  io.to(room).emit('newmessage', username + ": " + msg)
+  io.to(room).emit('privatemessage', username + ": " + msg)
   db.save(new db.Message({
     date: new Date(), //TODO: LOCAL DATETIME
     userid: 'dummy', //TODO: change when implemented.
