@@ -29,14 +29,21 @@ io.on('connection', function(socket){
     getuserrooms(socket, uid)
   })
   //private events
-  socket.on('privatemessage',function(room, username, msg){
+  socket.on('privatemessage', function(room, username, msg){
     privatemessage(socket, room, username, msg)
   })
   socket.on('privatecreate', function(name, email){
     privatecreate(socket, name, email)
   })
+  socket.on('privatejoin', function(room){
+      privatejoin(socket, room)
+  })
   //socket.on('privateadd', function(uid, rid){})
   //socket.on('privateoldmsgs', function(room, earliestfetchedmsg){})
+  //standard events
+  socket.on('disconnect', function () {
+    disconnect(socket)
+  });
 })
 
 // Meta Events
@@ -73,11 +80,18 @@ function privatecreate(socket, name, email){
   })
 }
 function privatemessage(socket, room, username, msg){
-  console.log(io.sockets.adapter.rooms)
+  console.log(room)
   io.to(room).emit('privatemessage', username + ": " + msg)
   db.save(new db.Message({
     date: new Date(), //TODO: LOCAL DATETIME
     userid: 'dummy', //TODO: change when implemented.
     message: msg //TODO:: remember when testing only server
   }), function(doc){/*TODO: DUMB*/}) //TODO: Expand with userid and datecreated.
+}
+function privatejoin(socket, room){
+    
+}
+//standard events
+function disconnect(){
+  console.log("user disconnected")
 }
