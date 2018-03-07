@@ -24,26 +24,29 @@ io.engine.generateId = (req) => {
 }
 
 io.on('connection', function(socket){
-  //meta events
-  socket.on('getuserrooms', function(uid){
-    getuserrooms(socket, uid)
-  })
-  //private events
-  socket.on('privatemessage', function(room, username, msg){
-    privatemessage(socket, room, username, msg)
-  })
-  socket.on('privatecreate', function(name, email){
-    privatecreate(socket, name, email)
-  })
-  socket.on('privatejoin', function(room){
-      privatejoin(socket, room)
-  })
-  //socket.on('privateadd', function(uid, rid){})
-  //socket.on('privateoldmsgs', function(room, earliestfetchedmsg){})
-  //standard events
-  socket.on('disconnect', function () {
-    disconnect(socket)
-  });
+    //meta events
+    socket.on('getuserrooms', function(uid){
+        getuserrooms(socket, uid)
+    })
+    //private events
+    socket.on('privatemessage', function(room, username, msg){
+        privatemessage(socket, room, username, msg)
+    })
+    socket.on('privatecreate', function(name, email){
+        privatecreate(socket, name, email)
+    })
+    socket.on('privateenter', function(room){
+        privateenter(socket, room)
+    })
+    socket.on('privateexit', function(room){
+        privateexit(socket, room)
+    })
+    //socket.on('privateadd', function(uid, rid){})
+    //socket.on('privateoldmsgs', function(room, earliestfetchedmsg){})
+    //standard events
+    socket.on('disconnect', function () {
+        disconnect(socket)
+    });
 })
 
 // Meta Events
@@ -72,7 +75,7 @@ function privatecreate(socket, name, email){
       if(io.sockets.connected[user[0]._id])
         io.sockets.connected[user[0]._id].join(doc._id)
 
-      //TODO: make this
+      //TODO: ONLY FOR TEST
       io.to(doc._id).emit('newroom', doc._id.toString())
     })
 
@@ -88,9 +91,20 @@ function privatemessage(socket, room, username, msg){
     message: msg //TODO:: remember when testing only server
   }), function(doc){/*TODO: DUMB*/}) //TODO: Expand with userid and datecreated.
 }
-function privatejoin(socket, room){
-    
+function privateenter(socket, room){
+    //SOCKETIO already checks if user is in room,
+    //Might still to know for other reasons. TODO.
+    socket.join(room)
+    console.log(socket.rooms)
 }
+function privateexit(socket, room){
+    socket.leave(room)
+    console.log(socket.rooms)
+
+
+
+}
+//USE DESTROY NAMING FOR WHEN ERASING ROOM!
 //standard events
 function disconnect(){
   console.log("user disconnected")
