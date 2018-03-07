@@ -83,7 +83,8 @@ function privatecreate(socket, name, email){
   })
 }
 function privatemessage(socket, room, username, msg){
-  console.log(room)
+  console.log("\n\n\n" + room + "\n")
+  console.log(socket.rooms)
   io.to(room).emit('privatemessage', username + ": " + msg)
   db.save(new db.Message({
     date: new Date(), //TODO: LOCAL DATETIME
@@ -95,14 +96,9 @@ function privateenter(socket, room){
     //SOCKETIO already checks if user is in room,
     //Might still to know for other reasons. TODO.
     socket.join(room)
-    console.log(socket.rooms)
 }
 function privateexit(socket, room){
     socket.leave(room)
-    console.log(socket.rooms)
-
-
-
 }
 //USE DESTROY NAMING FOR WHEN ERASING ROOM!
 //standard events
