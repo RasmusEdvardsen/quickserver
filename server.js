@@ -41,6 +41,9 @@ io.on('connection', function(socket){
     socket.on('privateexit', function(room){
         privateexit(socket, room)
     })
+    socket.on('privateleave', function(room, user){
+        db.privateleave(room, user)
+    })
     //socket.on('privateadd', function(uid, rid){})
     //socket.on('privateoldmsgs', function(room, earliestfetchedmsg){})
     //standard events

@@ -70,6 +70,17 @@ module.exports = {
       }
     )
   },
+  privateleave: function(room, user){
+      console.log(room + " " + user)
+      Room.update(
+          { _id: ObjectId(room) },
+          { $pull: { listUsers: user } },
+          function(err, records){
+              if(err) throw err
+              console.log(records)
+          }
+      )
+  },
   close: function(){
     db.close()
   }
