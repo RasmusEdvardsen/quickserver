@@ -53,31 +53,22 @@ module.exports = {
   },
   push: function(arrUser, doc){
     User.updateMany(
-      {_id:
-        {$in:
-          arrToObjectIDs(arrUser)
-        }
-      },
-      {$push:
-        {listRooms:
-          {roomid:doc._id,
-          dateJoined:new Date()}
-        }
-      },
+      { _id: { $in: arrToObjectIDs(arrUser) } },
+      { $push: { listRooms: { roomid:doc._id, dateJoined:new Date() } } },
       function(err, records){
         if(err) throw err
         console.log(records);
       }
     )
   },
-  privateleave: function(room, user){
-      console.log(room + " " + user)
+  privateleave: function(socket, room, user){
       Room.update(
           { _id: ObjectId(room) },
           { $pull: { listUsers: user } },
           function(err, records){
               if(err) throw err
               console.log(records)
+              socket.leave(room)
           }
       )
   },
@@ -85,6 +76,8 @@ module.exports = {
     db.close()
   }
 }
+
+
 
 // ## Internal Interface
 function arrToObjectIDs(arr){
