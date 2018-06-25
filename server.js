@@ -12,7 +12,7 @@ db.connect()
 
 routes(app) //register the route
 app.listen(27017, function(){
-  console.log('app listening on *:27017')
+  console.log('app listening on *:3001')
 })
 
 http.listen(3000, function(){
