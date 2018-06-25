@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
 db.connect()
 
 routes(app) //register the route
-app.listen(27017, function(){
+app.listen(3001, function(){
   console.log('app listening on *:3001')
 })
 
