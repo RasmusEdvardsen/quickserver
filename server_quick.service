@@ -1,0 +1,13 @@
+[Unit]
+Description=server.js - Quick's server
+After=network.target
+
+[Service]
+Environment=NODE_PORT=3000,3001
+Type=simple
+User=ubuntu
+ExecStart=/usr/bin/node /root/quick/quickserver/server.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
