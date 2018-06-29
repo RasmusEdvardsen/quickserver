@@ -11,12 +11,12 @@ app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
 db.connect()
 
 routes(app) //register the route
-app.listen(3001, function(){
-  console.log('app listening on *:3001')
+app.listen(3001, () => {
+  console.log('app listening on *:3001');
 })
 
-http.listen(3000, function(){
-  console.log('socket listening on *:3000')
+http.listen(3000, () => {
+  console.log('socket listening on *:3000');
 })
 
 io.engine.generateId = (req) => {
